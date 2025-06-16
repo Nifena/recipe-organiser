@@ -21,12 +21,14 @@ public class RecipeOrganiserApplication {
             boolean isRunning = true;
             Scanner scanner = new Scanner(System.in);
 
-
             while (isRunning) {
-                System.out.println("Wybierz jedną z dostępnych opcji");
-                System.out.println("1. Zaproponuj przepis na podstawie składników dostępnych w lodówce");
-                System.out.println("2. Pokaż dostępne przepisy");
-                System.out.println("3. Zakończ program");
+                System.out.println("Choose one of the available options");
+                System.out.println("1. Suggest a recipe based on the ingredients available in the fridge");
+                System.out.println("2. Show available recipes");
+                System.out.println("3. Add a recipe");
+                System.out.println("4. Delete a recipe");
+                System.out.println("5. Exit program");
+
                 String programmeChoice = scanner.nextLine();
 
                 if (programmeChoice.equals("1")) {
@@ -66,7 +68,7 @@ public class RecipeOrganiserApplication {
                         System.out.println("Unfortunately, you cannot prepare anything from the list with the provided ingredients.");
                     }
                 } else if (programmeChoice.equals("2")) {
-                    //duplikacja kodu
+                    //duplicate code
                     String sql = "SELECT * FROM recipe";
 
                     List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
@@ -74,9 +76,23 @@ public class RecipeOrganiserApplication {
                     for (Map<String, Object> row : rows) {
                         System.out.println(row.get("name").toString());
                     }
-                }else {
-                    isRunning = false;
-                }
+                } else if (programmeChoice.equals("3")) {
+
+                    System.out.println("Enter recipe name:");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter ingredients separated by commas:");
+                    String ingredients = scanner.nextLine();
+                    System.out.println("Enter preparation instructions:");
+                    String how_to_make = scanner.nextLine();
+
+                    String sql = "INSERT INTO recipe(name, ingredients, how_to_make)" +
+                            "VALUES ('" + name + "', '" + ingredients + "', '" + how_to_make + "')";
+
+                    jdbcTemplate.update(sql);
+
+                } else if (programmeChoice.equals("4")) {
+                    System.out.println();
+                } else isRunning = false;
 
             }
 
@@ -84,12 +100,12 @@ public class RecipeOrganiserApplication {
     }
 
     public static boolean linearIn(String[] outer, String[] inner) {
-        return Arrays.asList(outer).containsAll(Arrays.asList(inner)); //check if inner c outer
+        return Arrays.asList(outer).containsAll(Arrays.asList(inner)); //check if inner ⊂ outer
     }
 
-
-
 }
-//dodawanie/usuwanie/edytowanie przepisow
-//opcje do wyboru np 1.sniadania 2.obiady 3.desery 4.kolacje
-//opcja do wyboru czy chcemy przepisy wedlug tego co jest w lodowce czy dowolny wybor tj:
+
+//adding/removing/editing recipes
+//options to choose e.g. 1.breakfasts 2.lunches 3.desserts 4.dinners
+//option to choose whether we want recipes based on what's in the fridge or any recipe:
+//improve recipe entry

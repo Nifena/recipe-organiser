@@ -1,8 +1,8 @@
 USE recipes;
 
 CREATE TABLE IF NOT EXISTS recipes.recipe (
-                                              id INT AUTO_INCREMENT PRIMARY KEY,
-                                              name VARCHAR(255),
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
     ingredients TEXT,
     how_to_make TEXT
     );
