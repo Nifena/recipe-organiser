@@ -20,24 +20,20 @@ public class RecipeOrganiserApplication {
         return (args -> {
             boolean isRunning = true;
             Scanner scanner = new Scanner(System.in);
-
             while (isRunning) {
                 OutputHandler.outputOptions();
                 String programmeChoice = scanner.nextLine();
 
-                if (programmeChoice.equals("1")) {
-                    RecipeService.suggestRecipe(jdbcTemplate, scanner);
-                } else if (programmeChoice.equals("2")) {
-                    OutputHandler.showRecipes(jdbcTemplate);
-                } else if (programmeChoice.equals("3")) {
-                    RecipeService.addRecipe(jdbcTemplate, scanner);
-                } else if (programmeChoice.equals("4")) {
-                    RecipeService.deleteRecipe(jdbcTemplate, scanner);
-                } else isRunning = false;
+                if(programmeChoice.matches("[1-5]")){
+                    switch (programmeChoice) {
+                        case "1" -> RecipeService.suggestRecipe(jdbcTemplate, scanner);
+                        case "2" -> OutputHandler.showRecipes(jdbcTemplate);
+                        case "3" -> RecipeService.addRecipe(jdbcTemplate, scanner);
+                        case "4" -> RecipeService.deleteRecipe(jdbcTemplate, scanner);
+                        default -> isRunning = false;
+                    }
+                }else System.out.println("Invalid option, please enter a valid option");
             }
         });
     }
-
-
-
 }

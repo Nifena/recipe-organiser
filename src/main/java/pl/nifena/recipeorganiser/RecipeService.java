@@ -41,17 +41,31 @@ public class RecipeService {
 
     static void prepareList(List<String> recipeNames, Scanner scanner, List<Map<String, Object>> rows) {
         if (!recipeNames.isEmpty()) {
-            System.out.println("You can prepare: " + recipeNames);
 
-            System.out.println("Select the recipe you want to prepare:");
-            String choice = scanner.nextLine();
+            if(recipeNames.size() == 1) {
+                for (var row : rows) {
+                    if (row.get("name").toString().equalsIgnoreCase(recipeNames.getFirst())) {
+                        System.out.println(row.get("name"));
+                        System.out.println(row.get("how_to_make"));
+                    }
+                }
+            }else {
+                System.out.println("You can prepare following recipes:");
+                for (String recipeName : recipeNames) {
+                    System.out.println(recipeName);
+                }
 
-            for (var row : rows) {
-                if (row.get("name").toString().equalsIgnoreCase(choice)) {
-                    System.out.println(row.get("name"));
-                    System.out.println(row.get("how_to_make"));
+                System.out.println("Select the recipe you want to prepare:");
+                String choice = scanner.nextLine();
+
+                for (var row : rows) {
+                    if (row.get("name").toString().equalsIgnoreCase(choice)) {
+                        System.out.println(row.get("name"));
+                        System.out.println(row.get("how_to_make"));
+                    }
                 }
             }
+
         } else {
             System.out.println("Unfortunately, you cannot prepare anything from the list with the provided ingredients.");
         }
