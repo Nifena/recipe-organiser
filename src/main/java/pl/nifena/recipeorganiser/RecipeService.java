@@ -1,11 +1,9 @@
 package pl.nifena.recipeorganiser;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.util.*;
 
 public class RecipeService {
-
 
     static void suggestRecipe(JdbcTemplate jdbcTemplate, Scanner scanner) {
         System.out.println("Enter the ingredients you have in your fridge (separated by commas):");
@@ -19,12 +17,12 @@ public class RecipeService {
         prepareList(recipeNames, scanner, rows);
     }
 
-
     static void deleteRecipe(JdbcTemplate jdbcTemplate, Scanner scanner) {
         System.out.println("Enter recipe name you want to delete:");
         String delete = scanner.nextLine();
         String sql = "DELETE FROM recipe WHERE name = ?";
         jdbcTemplate.update(sql,delete);
+        System.out.println("Recipe deleted.");
     }
 
     static void addRecipe(JdbcTemplate jdbcTemplate, Scanner scanner) {
@@ -32,11 +30,19 @@ public class RecipeService {
         String name = scanner.nextLine();
         System.out.println("Enter ingredients separated by commas:");
         String ingredients = scanner.nextLine();
-        System.out.println("Enter preparation instructions:");
-        String how_to_make = scanner.nextLine();
+        System.out.println("Enter preparation instructions in points - new line for each step. Press '.' in separate line to finish:");
+        StringBuilder howToMake = new StringBuilder();
+        while(true){
+            String line = scanner.nextLine();
+            if(line.equals(".")){
+                break;
+            }
+            howToMake.append(line).append("\n");
+        }
 
-        String sql = "INSERT INTO recipe(name, ingredients, how_to_make) VALUES (?,?,?)";
-        jdbcTemplate.update(sql, name, ingredients, how_to_make);
+        String sql = "INSERT INTO recipe(name, ingredients, howToMake) VALUES (?,?,?)";
+        jdbcTemplate.update(sql, name, ingredients, howToMake.toString());
+        System.out.println("Recipe added successfully!");
     }
 
     static void prepareList(List<String> recipeNames, Scanner scanner, List<Map<String, Object>> rows) {
@@ -46,7 +52,7 @@ public class RecipeService {
                 for (var row : rows) {
                     if (row.get("name").toString().equalsIgnoreCase(recipeNames.getFirst())) {
                         System.out.println(row.get("name"));
-                        System.out.println(row.get("how_to_make"));
+                        System.out.println(row.get("how to make"));
                     }
                 }
             }else {
@@ -61,7 +67,7 @@ public class RecipeService {
                 for (var row : rows) {
                     if (row.get("name").toString().equalsIgnoreCase(choice)) {
                         System.out.println(row.get("name"));
-                        System.out.println(row.get("how_to_make"));
+                        System.out.println(row.get("how to make"));
                     }
                 }
             }
@@ -76,7 +82,7 @@ public class RecipeService {
 
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 
-        for (Map<String, Object> row : rows) {
+        for (var row : rows) {
             String ingredients = (String) row.get("ingredients");
             String[] splitIngredients = Arrays.stream(ingredients.split(",")).map(String::trim).toArray(String[]::new);
 

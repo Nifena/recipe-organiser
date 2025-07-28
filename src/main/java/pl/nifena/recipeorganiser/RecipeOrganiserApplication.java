@@ -24,12 +24,16 @@ public class RecipeOrganiserApplication {
                 OutputHandler.outputOptions();
                 String programmeChoice = scanner.nextLine();
 
-                if(programmeChoice.matches("[1-5]")){
+                if(programmeChoice.matches("[1-6]")){
                     switch (programmeChoice) {
                         case "1" -> RecipeService.suggestRecipe(jdbcTemplate, scanner);
                         case "2" -> OutputHandler.showRecipes(jdbcTemplate);
-                        case "3" -> RecipeService.addRecipe(jdbcTemplate, scanner);
-                        case "4" -> RecipeService.deleteRecipe(jdbcTemplate, scanner);
+                        case "3" -> {
+                            System.out.println("Enter recipe name:");
+                            OutputHandler.showRecipe(jdbcTemplate, scanner.nextLine());
+                        }
+                        case "4" -> RecipeService.addRecipe(jdbcTemplate, scanner);
+                        case "5" -> RecipeService.deleteRecipe(jdbcTemplate, scanner);
                         default -> isRunning = false;
                     }
                 }else System.out.println("Invalid option, please enter a valid option");
