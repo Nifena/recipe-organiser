@@ -35,5 +35,4 @@ public class OutputHandler {
             System.out.println(row.get("how to make"));
         }
     }
-
 }
